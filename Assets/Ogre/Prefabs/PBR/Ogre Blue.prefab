@@ -1277,7 +1277,7 @@ Animator:
   m_PrefabInstance: {fileID: 0}
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 3490066330406847947}
-  m_Enabled: 1
+  m_Enabled: 0
   m_Avatar: {fileID: 9000000, guid: 8807b9fa6350d26408b4faa0bb818db9, type: 3}
   m_Controller: {fileID: 9100000, guid: d8824f34ed8866644820cde2d01e6a7d, type: 2}
   m_CullingMode: 1
@@ -1309,6 +1309,7 @@ MonoBehaviour:
   desiredPosition: {x: 0, y: 0, z: 0}
   desiredScale: {x: 1, y: 1, z: 1}
   baseScale: 0
+  lerpTime: 200
 --- !u!1 &3490066330406847949
 GameObject:
   m_ObjectHideFlags: 0
