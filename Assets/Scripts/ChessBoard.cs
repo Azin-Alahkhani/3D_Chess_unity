@@ -3,6 +3,15 @@ using System.ComponentModel;
 using UnityEngine;
 using UnityEngine.SceneManagement;
 
+
+public enum SpecialMove
+{
+    None=0,
+    Enpassant =1,
+    Castling=2,
+    prmotion=3,
+    firstWhitePawn =4
+}
 public class ChessBoard : MonoBehaviour
 {
     [Header("Art")]
@@ -39,6 +48,9 @@ public class ChessBoard : MonoBehaviour
     public List<Vector2Int> availableMoves = new List<Vector2Int>();
     public bool isFirstMove;
     public bool isWhiteTurn;
+
+    public List<Vector2Int[]> moveHistoryList = new List<Vector2Int[]>();
+    public SpecialMove specialMove;
 
     public bool isPaused= false;
 
@@ -95,6 +107,7 @@ public class ChessBoard : MonoBehaviour
                             else
                                 availableMoves = currentlyDragging.GetPossibleMoves(ref chessPieces, X_COUNT, Y_COUNT);
                             HighlightTiles();
+                            specialMove = currentlyDragging.GetSpecialMoves(ref chessPieces, ref moveHistoryList, ref availableMoves);
 
                         }
                     }
@@ -366,6 +379,10 @@ public class ChessBoard : MonoBehaviour
         isWhiteTurn = !isWhiteTurn;
         isFirstMove = false;
 
+        moveHistoryList.Add(new Vector2Int[] { previousPosition, new Vector2Int(x, y) });
+
+        ProcessSpecialMove();
+
         return canMove;
     }
 
@@ -399,6 +416,48 @@ public class ChessBoard : MonoBehaviour
     {
         DisplayEndScreen(!isWhiteTeam);
     }
+    
+    
+    public void ProcessSpecialMove()
+    {
+
+        if(specialMove == SpecialMove.Enpassant)
+        {
+            ChessPiece enemyPawn = chessPieces[moveHistoryList[moveHistoryList.Count - 2][1].x, moveHistoryList[moveHistoryList.Count - 2][1].y];
+            if (enemyPawn.isWhiteTeam)
+            {
+               
+
+                deadWhites.Add(enemyPawn);
+                enemyPawn.SetScale(deathSize * Vector3.one);
+                enemyPawn.SetPosition(
+                    new Vector3(8 * tileSize, yOffset, -1 * tileSize)
+                    - bounds
+                    + new Vector3(tileSize / 2, 0, tileSize / 2)
+                    + Vector3.forward * deathSpacing * deadWhites.Count);
+
+            }
+            else
+            {
+                deadBlack.Add(enemyPawn);
+                enemyPawn.SetScale(deathSize * Vector3.one);
+                enemyPawn.SetPosition(
+                    new Vector3(-1 * tileSize, yOffset, 8 * tileSize)
+                    - bounds
+                    + new Vector3(tileSize / 2, 0, tileSize / 2)
+                    + Vector3.back * deathSpacing * deadBlack.Count);
+            }
+
+
+        
+
+    }
+
+
+
+        specialMove = SpecialMove.None;
+    }
+    
     public void DisplayEndScreen(bool isWhite)
     {
         endScreen.SetActive(true);
@@ -413,7 +472,8 @@ public class ChessBoard : MonoBehaviour
 
         //reset fields
         currentlyDragging = null;
-        availableMoves= new List<Vector2Int>();
+        availableMoves.Clear();
+        moveHistoryList.Clear();
 
         //clear the board
         for (int i = 0; i < X_COUNT; i++)
