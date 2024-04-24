@@ -109,6 +109,9 @@ public class ChessBoard : MonoBehaviour
                             HighlightTiles();
                             specialMove = currentlyDragging.GetSpecialMoves(ref chessPieces, ref moveHistoryList, ref availableMoves);
 
+
+                            PreventCheckMate();
+
                         }
                     }
                 }
@@ -181,7 +184,33 @@ public class ChessBoard : MonoBehaviour
 
         }
     }
+    public void PreventCheckMate()
+    {
 
+        ChessPiece targetKing = null;
+
+        for(int x= 0; x< tiles.Length; x++)
+        {
+            for(int y=0;y< tiles.Length; y++)
+            {
+                if (chessPieces[x,y].type == ChessPieceType.king)
+                {
+                    if (chessPieces[x,y].isWhiteTeam == currentlyDragging.isWhiteTeam)
+                    {
+                        targetKing = chessPieces[x, y];
+                    }
+                }
+            }
+        }
+
+
+
+    }
+
+    public void SimulateMoveForSinglePiece( ChessPiece cp, ref List<Vector2Int> moves, ChessPiece targetKing)
+    {
+
+    }
     public void DisplayPauseMenu() { }
     private void GenerateTiles(float tileSize, int xCount, int yCount)
     {
