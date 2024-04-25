@@ -309,8 +309,8 @@ public class ChessBoard : MonoBehaviour
         chessPieces[0, 7] = SpawnSinglePiece(ChessPieceType.Rook, false);
         chessPieces[1, 7] = SpawnSinglePiece(ChessPieceType.Knight, false);
         chessPieces[2, 7] = SpawnSinglePiece(ChessPieceType.Bishop, false);
-        chessPieces[3, 7] = SpawnSinglePiece(ChessPieceType.Queen, false);
         chessPieces[4, 7] = SpawnSinglePiece(ChessPieceType.king, false);
+        chessPieces[3, 7] = SpawnSinglePiece(ChessPieceType.Queen, false);
         chessPieces[5, 7] = SpawnSinglePiece(ChessPieceType.Bishop, false);
         chessPieces[6, 7] = SpawnSinglePiece(ChessPieceType.Knight, false);
         chessPieces[7, 7] = SpawnSinglePiece(ChessPieceType.Rook, false);
@@ -336,7 +336,6 @@ public class ChessBoard : MonoBehaviour
         cp.type = type;
         cp.isWhiteTeam = isWhiteTeam;
 
-        //cp.gameObject.GetComponent<MeshRenderer>().material = teamMaterials[isWhiteTeam ? 0 : 1];
 
         return cp;
 
@@ -480,7 +479,9 @@ public class ChessBoard : MonoBehaviour
 
     public void CheckMate(bool isWhiteTeam)
     {
+        isPaused = true;
         DisplayEndScreen(!isWhiteTeam);
+        
     }
     
     
