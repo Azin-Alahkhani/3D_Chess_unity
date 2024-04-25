@@ -1,5 +1,6 @@
 using System.Collections.Generic;
 using System.ComponentModel;
+using TMPro;
 using UnityEngine;
 using UnityEngine.SceneManagement;
 
@@ -54,6 +55,11 @@ public class ChessBoard : MonoBehaviour
 
     public bool isPaused= false;
 
+    //UI
+    public TMP_Text timerTXT;
+    private float timer = 0;
+    public GameObject[] turnsTxt;
+
     private void Awake()
     {
         isFirstMove = true;
@@ -82,6 +88,7 @@ public class ChessBoard : MonoBehaviour
         }
         if (!isPaused)
         {
+            UpdateTimer();
             RaycastHit info;
             Ray ray = currentCamera.ScreenPointToRay(Input.mousePosition);
 
@@ -184,24 +191,34 @@ public class ChessBoard : MonoBehaviour
 
         }
     }
+
+    public void UpdateTimer()
+    {
+        timer += Time.deltaTime;
+
+        int seconds = (int)(timer % 60);
+        int minutes = (int)(timer / 60);
+
+        timerTXT.text = (minutes > 9 ? minutes : "0"+minutes) + ":" + (seconds > 9 ? seconds : "0" + seconds);
+    }
     public void PreventCheckMate()
     {
 
-        ChessPiece targetKing = null;
+        //ChessPiece targetKing = null;
 
-        for(int x= 0; x< tiles.Length; x++)
-        {
-            for(int y=0;y< tiles.Length; y++)
-            {
-                if (chessPieces[x,y].type == ChessPieceType.king)
-                {
-                    if (chessPieces[x,y].isWhiteTeam == currentlyDragging.isWhiteTeam)
-                    {
-                        targetKing = chessPieces[x, y];
-                    }
-                }
-            }
-        }
+        //for(int x= 0; x< tiles.Length; x++)
+        //{
+        //    for(int y=0;y< tiles.Length; y++)
+        //    {
+        //        if (chessPieces[x,y].type == ChessPieceType.king)
+        //        {
+        //            if (chessPieces[x,y].isWhiteTeam == currentlyDragging.isWhiteTeam)
+        //            {
+        //                targetKing = chessPieces[x, y];
+        //            }
+        //        }
+        //    }
+        //}
 
 
 
@@ -212,6 +229,8 @@ public class ChessBoard : MonoBehaviour
 
     }
     public void DisplayPauseMenu() { }
+
+   
     private void GenerateTiles(float tileSize, int xCount, int yCount)
     {
 
@@ -406,6 +425,8 @@ public class ChessBoard : MonoBehaviour
         PositionSinglePiece(x, y,false);
 
         isWhiteTurn = !isWhiteTurn;
+
+        ToggleTurnText();
         isFirstMove = false;
 
         moveHistoryList.Add(new Vector2Int[] { previousPosition, new Vector2Int(x, y) });
@@ -413,6 +434,12 @@ public class ChessBoard : MonoBehaviour
         ProcessSpecialMove();
 
         return canMove;
+    }
+
+    void ToggleTurnText()
+    {
+        turnsTxt[0].SetActive(isWhiteTurn);
+        turnsTxt[1].SetActive(!isWhiteTurn);
     }
 
     public void HighlightTiles() {
@@ -495,14 +522,18 @@ public class ChessBoard : MonoBehaviour
 
     public void OnResetClicked() {
 
+        Debug.Log("clicked");
         endScreen.SetActive(false);
         endScreen.transform.GetChild(0).gameObject.SetActive(false);
         endScreen.transform.GetChild(1).gameObject.SetActive(false);
+        pauseScreen.SetActive(false);
 
         //reset fields
         currentlyDragging = null;
         availableMoves.Clear();
         moveHistoryList.Clear();
+        timer = 0;
+        timerTXT.text = "00:00";
 
         //clear the board
         for (int i = 0; i < X_COUNT; i++)
