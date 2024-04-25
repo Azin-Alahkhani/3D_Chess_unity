@@ -199,7 +199,7 @@ public class ChessBoard : MonoBehaviour
         int seconds = (int)(timer % 60);
         int minutes = (int)(timer / 60);
 
-        timerTXT.text = (minutes > 9 ? minutes : "0"+minutes) + ":" + (seconds > 9 ? seconds : "0" + seconds);
+        timerTXT.text = (minutes > 9 ? minutes : "0"+minutes) + " : " + (seconds > 9 ? seconds : "0" + seconds);
     }
     public void PreventCheckMate()
     {
@@ -533,7 +533,7 @@ public class ChessBoard : MonoBehaviour
         availableMoves.Clear();
         moveHistoryList.Clear();
         timer = 0;
-        timerTXT.text = "00:00";
+        timerTXT.text = "00 : 00";
 
         //clear the board
         for (int i = 0; i < X_COUNT; i++)
