@@ -59,6 +59,7 @@ public class ChessBoard : MonoBehaviour
     public TMP_Text timerTXT;
     private float timer = 0;
     public GameObject[] turnsTxt;
+    public TMP_Text[] deadCounts; 
 
     private void Awake()
     {
@@ -200,6 +201,12 @@ public class ChessBoard : MonoBehaviour
         int minutes = (int)(timer / 60);
 
         timerTXT.text = (minutes > 9 ? minutes : "0"+minutes) + " : " + (seconds > 9 ? seconds : "0" + seconds);
+    }
+   
+    public void UpdateDeadCounts()
+    {
+        deadCounts[0].text = "White : " + deadWhites.Count;
+        deadCounts[1].text = "Black : " + deadBlack.Count;
     }
     public void PreventCheckMate()
     {
@@ -388,10 +395,12 @@ public class ChessBoard : MonoBehaviour
             }
             else  
             {
+                if (otherPiece.type == ChessPieceType.king)
+                    CheckMate(otherPiece.isWhiteTeam);
+
                 if (otherPiece.isWhiteTeam)
                 {
-                    if (otherPiece.type == ChessPieceType.king)
-                        CheckMate(otherPiece.isWhiteTeam);
+                   
 
                     deadWhites.Add(otherPiece);
                     otherPiece.SetScale(deathSize * Vector3.one);
@@ -412,8 +421,9 @@ public class ChessBoard : MonoBehaviour
                         + new Vector3(tileSize / 2, 0, tileSize / 2)
                         + Vector3.back * deathSpacing * deadBlack.Count);
                 }
+                UpdateDeadCounts();
 
-                
+
             }
         }
 
@@ -534,7 +544,8 @@ public class ChessBoard : MonoBehaviour
         moveHistoryList.Clear();
         timer = 0;
         timerTXT.text = "00 : 00";
-
+        deadCounts[0].text = "White : 0";
+        deadCounts[1].text = "Black : 0";
         //clear the board
         for (int i = 0; i < X_COUNT; i++)
         {

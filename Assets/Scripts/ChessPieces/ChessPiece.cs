@@ -32,17 +32,10 @@ public class ChessPiece : MonoBehaviour
     private void Start()
     {
        
-        if (type == ChessPieceType.Knight) {
-            baseScale = 0.14f;
-
-            desiredScale = new Vector3(0.14f, 0.14f, 0.14f);
-
-        }
-        else
-        {
+      
             baseScale = 1;
             desiredScale = Vector3.one;
-        }
+        
         transform.rotation = Quaternion.Euler(isWhiteTeam ? Vector3.zero : new Vector3(0, 180, 0));
     }
     public void Update()
