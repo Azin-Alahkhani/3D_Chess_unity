@@ -1,5 +1,4 @@
 using System.Collections.Generic;
-using Unity.VisualScripting;
 using UnityEngine;
 
 
@@ -15,7 +14,7 @@ public enum ChessPieceType
 }
 public class ChessPiece : MonoBehaviour
 {
-  
+
     public ChessPieceType type;
 
     public int currentX;
@@ -31,11 +30,12 @@ public class ChessPiece : MonoBehaviour
 
     private void Start()
     {
-       
-      
-            baseScale = 1;
-            desiredScale = Vector3.one;
-        
+
+
+        baseScale = 1;
+        desiredScale = Vector3.one;
+
+
         transform.rotation = Quaternion.Euler(isWhiteTeam ? Vector3.zero : new Vector3(0, 180, 0));
     }
     public void Update()
@@ -43,19 +43,20 @@ public class ChessPiece : MonoBehaviour
         transform.position = Vector3.Lerp(transform.position, desiredPosition, Time.deltaTime * 10f);
         transform.localScale = Vector3.Lerp(transform.localScale, desiredScale, Time.deltaTime * 20);
     }
-    public virtual void SetPosition(Vector3 position, bool force=false) { 
+    public virtual void SetPosition(Vector3 position, bool force = false)
+    {
         desiredPosition = position;
 
         if (force)
         {
             transform.position = desiredPosition;
         }
-       
+
     }
 
-    public virtual void SetScale(Vector3 scale, bool force=false)
+    public virtual void SetScale(Vector3 scale, bool force = false)
     {
-        desiredScale = baseScale* scale;
+        desiredScale = baseScale * scale;
 
         if (force)
         {
@@ -64,9 +65,9 @@ public class ChessPiece : MonoBehaviour
 
     }
 
-    public virtual List<Vector2Int> GetPossibleMoves(ref ChessPiece[,] board , int tileCountX, int tileCountY, bool isFirstMove=false)
+    public virtual List<Vector2Int> GetPossibleMoves(ref ChessPiece[,] board, int tileCountX, int tileCountY, bool isFirstMove = false)
     {
-            List<Vector2Int> r = new List<Vector2Int>();
+        List<Vector2Int> r = new List<Vector2Int>();
 
 
         r.Add(new Vector2Int(3, 3));
@@ -76,7 +77,7 @@ public class ChessPiece : MonoBehaviour
 
         return r;
     }
-    public virtual SpecialMove GetSpecialMoves(ref ChessPiece[,] board,  ref List<Vector2Int[]> moveHistoryList, ref List<Vector2Int> availableMoves)
+    public virtual SpecialMove GetSpecialMoves(ref ChessPiece[,] board, ref List<Vector2Int[]> moveHistoryList, ref List<Vector2Int> availableMoves)
     {
 
         return SpecialMove.None;
@@ -84,4 +85,4 @@ public class ChessPiece : MonoBehaviour
     }
 
 
-    }
+}

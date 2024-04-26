@@ -22,7 +22,7 @@ public class ChessBoard : MonoBehaviour
     private const int X_COUNT = 8;
     private const int Y_COUNT = 8;
     private float tileSize = 1;
-    private float yOffset = 0.15f;
+    private float yOffset = 2.15f;
     private const float deathSize = 0.4f;
     private const float deathSpacing = 0.4f;
     [SerializeField] private Vector3 boardCenter = Vector3.zero;
@@ -30,7 +30,7 @@ public class ChessBoard : MonoBehaviour
     //ART
     [SerializeField] private GameObject[] piecesPrefabs;
     [SerializeField] private Material[] teamMaterials; //0 white, 1 black
-
+    [SerializeField] private GameObject[] piecesPrefabs2;
 
     [SerializeField] private GameObject endScreen;
     [SerializeField] private GameObject pauseScreen;
@@ -462,7 +462,7 @@ public class ChessBoard : MonoBehaviour
 
         int index = (isWhiteTeam) ? (int)type - 1 : (int)type + 5;
 
-        cp = Instantiate(piecesPrefabs[index], transform).GetComponent<ChessPiece>();
+        cp = Instantiate(piecesPrefabs2[index], transform).GetComponent<ChessPiece>();
 
 
 
