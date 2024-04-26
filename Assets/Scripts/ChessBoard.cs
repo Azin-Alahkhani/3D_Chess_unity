@@ -581,11 +581,14 @@ public class ChessBoard : MonoBehaviour
 
         return true;
     }
-
+    public GameObject blackCamera;
     void ToggleTurnText()
     {
         turnsTxt[0].SetActive(isWhiteTurn);
         turnsTxt[1].SetActive(!isWhiteTurn);
+
+        blackCamera.SetActive(!isWhiteTurn);
+        
     }
 
     public void HighlightTiles()
