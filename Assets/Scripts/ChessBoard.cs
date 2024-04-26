@@ -212,9 +212,9 @@ public class ChessBoard : MonoBehaviour
 
         ChessPiece targetKing = null;
 
-        for (int x = 0; x < tiles.Length; x++)
+        for (int x = 0; x < X_COUNT; x++)
         {
-            for (int y = 0; y < tiles.Length; y++)
+            for (int y = 0; y < Y_COUNT; y++)
             {
                 if (chessPieces[x, y] != null)
                     if (chessPieces[x, y].type == ChessPieceType.king)
@@ -309,6 +309,63 @@ public class ChessBoard : MonoBehaviour
 
     }
   
+    public bool IsItCheckMate()
+    {
+        var lastMove = moveHistoryList[moveHistoryList.Count-1];
+        bool targetTeamIsWhite = (chessPieces[lastMove[1].x, lastMove[1].y].isWhiteTeam);
+
+        List<ChessPiece> attackingPieces = new List<ChessPiece>();
+        List<ChessPiece> defendingPieces = new List<ChessPiece>();
+
+
+        ChessPiece targetKing = null;
+        for (int x = 0; x < X_COUNT; x++)
+        {
+            for (int y = 0; y < Y_COUNT; y++)
+            {
+                if (chessPieces[x, y] != null)
+                {
+                    if (chessPieces[x,y].isWhiteTeam == targetTeamIsWhite)
+                    {
+                        defendingPieces.Add(chessPieces[x, y]);
+                        if (chessPieces[x, y].type == ChessPieceType.king)
+                            targetKing = chessPieces[x, y];
+                    }
+                    else
+                    {
+                        attackingPieces.Add(chessPieces[x, y]);
+                    }
+                    
+                }
+            }
+        }
+
+
+        List<Vector2Int> currentPossibleMoves = new List<Vector2Int>();
+        for(int i = 0; i< attackingPieces.Count; i++)
+        {
+            var pieceMoves = attackingPieces[i].GetPossibleMoves(ref chessPieces, X_COUNT, Y_COUNT);
+            for (int j = 0; j < pieceMoves.Count; j++)
+            {
+                currentPossibleMoves.Add(pieceMoves[j]);
+            }
+        }
+
+        if(ContainsValidMove(ref currentPossibleMoves, new Vector2Int(targetKing.currentX, targetKing.currentY)))
+        {           
+            for (int i = 0; i < defendingPieces.Count; i++)
+            {
+                var defendingMoves = defendingPieces[i].GetPossibleMoves(ref chessPieces, X_COUNT, Y_COUNT);
+                Debug.Log(defendingMoves.Count);
+                SimulateMoveForSinglePiece(defendingPieces[i], ref defendingMoves, targetKing);
+                Debug.Log(defendingMoves.Count);
+                if (defendingMoves.Count == 0)
+                    return true;
+            }
+        }
+
+        return false;
+    }
 
     private void GenerateTiles(float tileSize, int xCount, int yCount)
     {
@@ -516,7 +573,10 @@ public class ChessBoard : MonoBehaviour
 
         ProcessSpecialMove();
 
-        return canMove;
+        if (IsItCheckMate())
+            CheckMate(!currentPiece.isWhiteTeam);
+
+        return true;
     }
 
     void ToggleTurnText()
