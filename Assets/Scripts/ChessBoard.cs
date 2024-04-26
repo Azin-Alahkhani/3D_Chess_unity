@@ -59,6 +59,7 @@ public class ChessBoard : MonoBehaviour
     private float timer = 0;
     public GameObject[] turnsTxt;
     public TMP_Text[] deadCounts;
+    public GameObject checkTextGo;
 
     private void Awake()
     {
@@ -179,15 +180,15 @@ public class ChessBoard : MonoBehaviour
                 }
             }
 
-            //if (currentlyDragging)
-            //{
-            //    Plane horizontalPlane = new Plane(Vector3.up, Vector3.up * yOffset);
-            //    float distance = 0;
-            //    if (horizontalPlane.Raycast(ray, out distance))
-            //    {
-            //        currentlyDragging.SetPosition(ray.GetPoint(distance) + Vector3.up * draggingOffset);
-            //    }
-            //}
+            if (currentlyDragging)
+            {
+                Plane horizontalPlane = new Plane(Vector3.up, Vector3.up * yOffset);
+                float distance = 0;
+                if (horizontalPlane.Raycast(ray, out distance))
+                {
+                    currentlyDragging.SetPosition(ray.GetPoint(distance) + Vector3.up * draggingOffset);
+                }
+            }
 
         }
     }
@@ -308,7 +309,8 @@ public class ChessBoard : MonoBehaviour
 
 
     }
-  
+
+    
     public bool IsItCheckMate()
     {
         var lastMove = moveHistoryList[moveHistoryList.Count-1];
@@ -352,18 +354,19 @@ public class ChessBoard : MonoBehaviour
         }
 
         if(ContainsValidMove(ref currentPossibleMoves, new Vector2Int(targetKing.currentX, targetKing.currentY)))
-        {           
+        {
+           // checkTextGo.SetActive(true);
             for (int i = 0; i < defendingPieces.Count; i++)
             {
                 var defendingMoves = defendingPieces[i].GetPossibleMoves(ref chessPieces, X_COUNT, Y_COUNT);
-                Debug.Log(defendingMoves.Count);
+                Debug.Log(defendingMoves[0]);
                 SimulateMoveForSinglePiece(defendingPieces[i], ref defendingMoves, targetKing);
                 Debug.Log(defendingMoves.Count);
                 if (defendingMoves.Count == 0)
                     return true;
             }
         }
-
+        
         return false;
     }
 

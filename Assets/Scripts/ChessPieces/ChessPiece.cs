@@ -40,7 +40,7 @@ public class ChessPiece : MonoBehaviour
     }
     public void Update()
     {
-        transform.position = Vector3.Lerp(transform.position, desiredPosition, Time.deltaTime * 1f);
+        transform.position = Vector3.Lerp(transform.position, desiredPosition, Time.deltaTime * 10f);
         transform.localScale = Vector3.Lerp(transform.localScale, desiredScale, Time.deltaTime * 20);
     }
     public virtual void SetPosition(Vector3 position, bool force=false) { 
