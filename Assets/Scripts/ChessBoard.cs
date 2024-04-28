@@ -9,7 +9,7 @@ public enum SpecialMove
     None = 0,
     Enpassant = 1,
     Castling = 2,
-    prmotion = 3,
+    Promotion = 3,
     firstWhitePawn = 4
 }
 public class ChessBoard : MonoBehaviour
@@ -662,6 +662,21 @@ public class ChessBoard : MonoBehaviour
         }
 
 
+        if(specialMove == SpecialMove.Promotion)
+        {
+            Vector2Int lastMove = moveHistoryList[moveHistoryList.Count - 1][1];
+            ChessPiece pawnToPromote = chessPieces[lastMove.x, lastMove.y];
+
+            if((pawnToPromote.isWhiteTeam && pawnToPromote.currentY == 7)|| (!pawnToPromote.isWhiteTeam && pawnToPromote.currentY == 0))
+            {
+                ChessPiece newQueen = SpawnSinglePiece(ChessPieceType.Queen, pawnToPromote.isWhiteTeam);
+                newQueen.transform.position = chessPieces[lastMove.x, lastMove.y].transform.position;
+                Destroy(chessPieces[lastMove.x, lastMove.y].gameObject);
+                chessPieces[lastMove.x, lastMove.y] = newQueen;
+                PositionSinglePiece(lastMove.x, lastMove.y, true);
+            }
+            
+        }
 
         specialMove = SpecialMove.None;
     }

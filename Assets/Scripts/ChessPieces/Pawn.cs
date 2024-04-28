@@ -68,6 +68,9 @@ public class Pawn : ChessPiece
                 
 
             }
+
+            if ((isWhiteTeam && currentY == 6 ) ||(!isWhiteTeam && currentY == 1))
+                return SpecialMove.Promotion;
         }
 
 

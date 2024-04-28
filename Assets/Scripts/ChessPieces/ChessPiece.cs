@@ -35,8 +35,8 @@ public class ChessPiece : MonoBehaviour
         baseScale = 1;
         desiredScale = Vector3.one;
 
-
-        transform.rotation = Quaternion.Euler(isWhiteTeam ? Vector3.zero : new Vector3(0, 180, 0));
+       
+        transform.rotation = Quaternion.Euler(isWhiteTeam ? new Vector3(0, -90, 0) : new Vector3(0, 90, 0));
     }
     public void Update()
     {

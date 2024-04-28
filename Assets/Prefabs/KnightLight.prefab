@@ -96,3 +96,12 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: ab786d20efa50ae41b1dd86a542d1a07, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  type: 0
+  currentX: 0
+  currentY: 0
+  isWhiteTeam: 0
+  desiredPosition: {x: 0, y: 0, z: 0}
+  desiredScale: {x: 1, y: 1, z: 1}
+  baseScale: 0
+  lerpTime: 200
+  animator: {fileID: 0}
